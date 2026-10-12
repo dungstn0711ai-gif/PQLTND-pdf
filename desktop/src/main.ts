@@ -447,18 +447,6 @@ function buildMenu(): void {
             mainWindow?.loadURL(`${APP_ORIGIN}/cit-about.html`);
           },
         },
-        {
-          label: fill(text.sourceCode, { app: APP_NAME }),
-          click: async () => {
-            await shell.openExternal('https://github.com/Cuongyd196/cit-pdf');
-          },
-        },
-        {
-          label: 'BentoPDF (GitHub)',
-          click: async () => {
-            await shell.openExternal('https://github.com/alam00000/bentopdf');
-          },
-        },
       ],
     },
   ];
