@@ -1,8 +1,8 @@
 {
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
   "appId": "com.cuongit.citpdf",
-  "productName": "CIT-PDF",
-  "copyright": "Copyright © 2026 Cường IT. Based on BentoPDF © BentoPDF Contributors (AGPL-3.0)",
+  "productName": "PQLTNĐ-PDF",
+  "copyright": "Copyright © 2026 Lại Tiến Dũng. Based on CIT-PDF © Cường IT and BentoPDF © BentoPDF Contributors (AGPL-3.0)",
   "directories": {
     "app": "desktop",
     "output": "release",
@@ -42,18 +42,18 @@
     ]
   },
   "nsis": {
-    "artifactName": "${productName}-${version}-Windows-x64-Setup.${ext}",
+    "artifactName": "PQLTND-PDF-${version}-Windows-x64-Setup.${ext}",
     "oneClick": false,
     "perMachine": false,
     "allowElevation": false,
     "allowToChangeInstallationDirectory": true,
     "createDesktopShortcut": true,
     "createStartMenuShortcut": true,
-    "shortcutName": "CIT-PDF",
-    "uninstallDisplayName": "CIT-PDF"
+    "shortcutName": "PQLTNĐ-PDF",
+    "uninstallDisplayName": "PQLTNĐ-PDF"
   },
   "portable": {
-    "artifactName": "${productName}-${version}-Windows-x64-Portable.${ext}"
+    "artifactName": "PQLTND-PDF-${version}-Windows-x64-Portable.${ext}"
   },
   "mac": {
     "target": [

@@ -1,15 +1,15 @@
-<p align="center"><img src="public/images/cit-pdf-logo.svg" width="96" alt="CIT-PDF"></p>
-<h1 align="center">CIT-PDF</h1>
+<p align="center"><img src="public/images/cit-pdf-logo.svg" width="96" alt="PQLTNĐ-PDF"></p>
+<h1 align="center">PQLTNĐ-PDF</h1>
 
-**CIT-PDF** là bộ công cụ PDF dành cho máy tính Windows. Mọi thao tác xử lý đều chạy ngay trên máy của bạn; tệp không được gửi lên máy chủ nào.
+**PQLTNĐ-PDF** là bộ công cụ PDF dành cho máy tính Windows. Mọi thao tác xử lý đều chạy ngay trên máy của bạn; tệp không được gửi lên máy chủ nào.
 
-CIT-PDF là bản sửa đổi (fork) của [BentoPDF](https://github.com/alam00000/bentopdf), do Cường IT đóng gói lại thành ứng dụng desktop và phát hành theo giấy phép **AGPL-3.0**. Đây không phải sản phẩm chính thức của BentoPDF.
+PQLTNĐ-PDF là bản sửa đổi của CIT-PDF (do Cường IT đóng gói lại từ [BentoPDF](https://github.com/alam00000/bentopdf)), do Lại Tiến Dũng sưu tầm mã nguồn, phát triển và xây dựng, phát hành theo giấy phép **AGPL-3.0**. Đây không phải sản phẩm chính thức của BentoPDF.
 
 ## Tính năng
 
 - Hơn 50 công cụ PDF kế thừa từ BentoPDF: gộp, tách, xoay, sắp xếp trang, nén, chuyển đổi sang và từ PDF, ký số, đặt mật khẩu, OCR, chỉnh sửa nội dung.
 - Giao diện desktop riêng: thanh bên có tìm kiếm, công cụ yêu thích, công cụ dùng gần đây và nhóm công cụ.
-- Mở tệp `.pdf` trực tiếp từ hệ điều hành ("Open with CIT-PDF"); mở nhiều tệp vẫn chỉ dùng một cửa sổ.
+- Mở tệp `.pdf` trực tiếp từ hệ điều hành ("Open with PQLTNĐ-PDF"); mở nhiều tệp vẫn chỉ dùng một cửa sổ.
 - Giao diện mặc định tiếng Việt, có thể chuyển sang ngôn ngữ khác.
 
 ## Cài đặt
@@ -20,8 +20,8 @@ Dành cho Windows 10 và 11 (64-bit).
 
 | Tệp                                            | Ghi chú                                |
 | ---------------------------------------------- | -------------------------------------- |
-| `CIT-PDF-<phiên bản>-Windows-x64-Setup.exe`    | Bản cài, không cần quyền Administrator |
-| `CIT-PDF-<phiên bản>-Windows-x64-Portable.exe` | Bản Portable, chạy thẳng không cần cài |
+| `PQLTND-PDF-<phiên bản>-Windows-x64-Setup.exe`    | Bản cài, không cần quyền Administrator |
+| `PQLTND-PDF-<phiên bản>-Windows-x64-Portable.exe` | Bản Portable, chạy thẳng không cần cài |
 
 ### Module tải khi dùng lần đầu
 
@@ -54,7 +54,7 @@ Chi tiết về kiến trúc bản desktop nằm trong [DESKTOP.md](DESKTOP.md).
 
 ## Thay đổi so với BentoPDF
 
-CIT-PDF dựa trên BentoPDF 2.8.8 và được sửa đổi trong năm 2026:
+PQLTNĐ-PDF dựa trên BentoPDF 2.8.8 và được sửa đổi trong năm 2026:
 
 - Thêm lớp vỏ Electron (`desktop/`) với giao thức `app://` riêng để chạy ứng dụng không cần máy chủ web.
 - Thêm trình quản lý module (`desktop/src/modules-manager.ts`) tải, kiểm tra mã băm và lưu các bộ xử lý WASM trên máy.
@@ -66,13 +66,13 @@ Phần xử lý PDF của BentoPDF được giữ nguyên, kể cả dòng produ
 
 ## Giấy phép
 
-CIT-PDF được phát hành theo [GNU AGPL-3.0](LICENSE). Bạn được dùng, sửa đổi và phân phối lại, với điều kiện bản phân phối của bạn cũng công khai mã nguồn theo AGPL-3.0.
+PQLTNĐ-PDF được phát hành theo [GNU AGPL-3.0](LICENSE). Bạn được dùng, sửa đổi và phân phối lại, với điều kiện bản phân phối của bạn cũng công khai mã nguồn theo AGPL-3.0.
 
 - Bản quyền phần mã gốc: © BentoPDF Contributors.
 - Bản quyền phần sửa đổi: © 2026 Cường IT.
 - Mã nguồn tương ứng với từng bản phát hành nằm tại tag cùng số phiên bản trong kho này.
 
-BentoPDF còn có giấy phép thương mại riêng cho ai muốn dùng trong sản phẩm đóng nguồn; xem [bentopdf.com/licensing.html](https://bentopdf.com/licensing.html). CIT-PDF không cấp giấy phép đó.
+BentoPDF còn có giấy phép thương mại riêng cho ai muốn dùng trong sản phẩm đóng nguồn; xem [bentopdf.com/licensing.html](https://bentopdf.com/licensing.html). PQLTNĐ-PDF không cấp giấy phép đó.
 
 ### Thành phần bên thứ ba
 

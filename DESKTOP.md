@@ -1,6 +1,6 @@
-# CIT-PDF Desktop
+# PQLTNĐ-PDF Desktop
 
-CIT-PDF là bản desktop của [BentoPDF](https://github.com/alam00000/bentopdf), đóng gói bằng **Electron**. Mọi thao tác với tệp PDF chạy ngay trên máy người dùng, không gửi tệp đi đâu.
+PQLTNĐ-PDF là bản desktop của [BentoPDF](https://github.com/alam00000/bentopdf), đóng gói bằng **Electron**. Mọi thao tác với tệp PDF chạy ngay trên máy người dùng, không gửi tệp đi đâu.
 
 Tài liệu này dành cho người phát triển và người đóng gói bản cài. Giới thiệu chung về dự án nằm ở [README.md](README.md).
 
@@ -12,7 +12,7 @@ Tài liệu này dành cho người phát triển và người đóng gói bản
 
 - **Windows:** bộ cài NSIS theo từng người dùng (`.exe`), không cần quyền Administrator, cho chọn thư mục cài. Có kèm bản **Portable** chạy không cần cài.
 - **macOS** (`.dmg`) và **Linux** (`.AppImage`, `.deb`) đã có cấu hình trong [electron-builder.json](electron-builder.json) nhưng chưa được build và thử trong fork này.
-- Tệp `.pdf` được đăng ký "Mở bằng CIT-PDF".
+- Tệp `.pdf` được đăng ký "Mở bằng PQLTNĐ-PDF".
 - Ứng dụng chỉ chạy một cửa sổ: mở thêm tệp khi app đang chạy sẽ đưa tệp vào cửa sổ hiện có.
 
 ### Giao diện
@@ -74,7 +74,7 @@ npm run desktop:dist:all   # build + đóng gói cho Windows, macOS, Linux
 
 `npm run desktop:build` làm các bước sau ([scripts/build-desktop.mjs](scripts/build-desktop.mjs)):
 
-1. Build phần web ở chế độ desktop (`VITE_DESKTOP=true`, `SIMPLE_MODE=true`, thương hiệu CIT-PDF, ngôn ngữ mặc định `vi`).
+1. Build phần web ở chế độ desktop (`VITE_DESKTOP=true`, `SIMPLE_MODE=true`, thương hiệu PQLTNĐ-PDF, ngôn ngữ mặc định `vi`).
 2. Biên dịch `desktop/src/` sang `desktop/dist/`.
 3. Chép cpdf vào `desktop/bundled-modules/cpdf/dist/`.
 4. Chép phần web sang `desktop/dist-web/`, bỏ các tệp WASM nặng.
@@ -118,7 +118,7 @@ Cần ba chỗ: một mục trong `modules-manifest.json`, đường dẫn mặc
 
 ## 4. Giấy phép khi phát hành
 
-CIT-PDF là bản sửa đổi của BentoPDF và phát hành theo **GNU AGPL-3.0**. Mỗi bản phát hành cần giữ đủ các điểm sau:
+PQLTNĐ-PDF là bản sửa đổi của BentoPDF và phát hành theo **GNU AGPL-3.0**. Mỗi bản phát hành cần giữ đủ các điểm sau:
 
 - Mã nguồn đầy đủ, gồm cả phần sửa đổi, công khai tại <https://github.com/Cuongyd196/cit-pdf>, và trang Giới thiệu trong ứng dụng dẫn tới đó.
 - Trang Giới thiệu ghi rõ đây là bản đã sửa đổi so với BentoPDF.
@@ -132,5 +132,5 @@ CIT-PDF là bản sửa đổi của BentoPDF và phát hành theo **GNU AGPL-3.
 1. Sửa `version` trong `desktop/package.json`.
 2. Chạy `npx tsc --noEmit` và `npm run test:run`.
 3. Chạy `npm run desktop:dist`; bộ cài nằm trong `release/`.
-4. Cài thử trên một máy chưa từng cài CIT-PDF: mở tệp PDF từ Explorer, chạy một công cụ cần tải bộ xử lý, in thử một trang.
+4. Cài thử trên một máy chưa từng cài PQLTNĐ-PDF: mở tệp PDF từ Explorer, chạy một công cụ cần tải bộ xử lý, in thử một trang.
 5. Gắn thẻ phiên bản, đẩy mã nguồn lên GitHub và tạo Release kèm các tệp trong `release/`.

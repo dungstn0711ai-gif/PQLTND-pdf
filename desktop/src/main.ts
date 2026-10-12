@@ -37,7 +37,7 @@ if (!gotTheLock) {
   app.quit();
 }
 
-const APP_NAME = 'CIT-PDF';
+const APP_NAME = 'PQLTNĐ-PDF';
 const APP_ORIGIN = 'app://bentopdf';
 
 let mainWindow: BrowserWindow | null = null;

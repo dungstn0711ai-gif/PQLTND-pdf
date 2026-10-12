@@ -15,13 +15,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const root = resolve(__dirname, '..');
 
-// CIT-PDF has its own version (desktop/package.json), independent of the
+// PQLTNĐ-PDF has its own version (desktop/package.json), independent of the
 // upstream BentoPDF version in the root package.json.
 const desktopVersion = JSON.parse(
   readFileSync(resolve(root, 'desktop', 'package.json'), 'utf8')
 ).version;
 
-console.log('=== Building CIT-PDF Desktop Application ===');
+console.log('=== Building PQLTNĐ-PDF Desktop Application ===');
 
 // 1. Build web assets for desktop (tools only, no compression duplicates, no SW precache)
 console.log('1. Building frontend with Vite (desktop mode)...');
@@ -30,10 +30,10 @@ execSync('npx vite build', {
   stdio: 'inherit',
   env: {
     // Desktop branding defaults; override by setting these before running.
-    VITE_BRAND_NAME: 'CIT-PDF',
+    VITE_BRAND_NAME: 'PQLTNĐ-PDF',
     VITE_BRAND_LOGO: 'images/cit-pdf-logo.svg',
     VITE_FOOTER_TEXT:
-      '© 2026 CIT-PDF · Cường IT. Dựa trên BentoPDF (AGPL-3.0).',
+      '© 2026 PQLTNĐ-PDF · Lại Tiến Dũng. Dựa trên CIT-PDF (Cường IT) và BentoPDF (AGPL-3.0).',
     VITE_DEFAULT_LANGUAGE: 'vi',
     // OCR language packs offered as downloads (desktop/app/modules-manifest.json).
     VITE_TESSERACT_AVAILABLE_LANGUAGES: 'vie,eng',

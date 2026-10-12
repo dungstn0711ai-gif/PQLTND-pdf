@@ -1,8 +1,8 @@
 {
   "name": "cit-pdf",
   "version": "1.0.0",
-  "description": "CIT-PDF - privacy-first offline PDF toolbox, based on BentoPDF",
-  "author": "Cường IT",
+  "description": "PQLTNĐ-PDF - privacy-first offline PDF toolbox, based on CIT-PDF and BentoPDF",
+  "author": "Lại Tiến Dũng",
   "license": "AGPL-3.0-only",
   "homepage": "https://github.com/Cuongyd196/cit-pdf",
   "repository": {
