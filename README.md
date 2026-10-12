@@ -1,4 +1,4 @@
-<p align="center"><img src="public/images/cit-pdf-logo.svg" width="96" alt="PQLTNĐ-PDF"></p>
+<p align="center"><img src="public/images/pqltnd-pdf-logo.svg" width="96" alt="PQLTNĐ-PDF"></p>
 <h1 align="center">PQLTNĐ-PDF</h1>
 
 **PQLTNĐ-PDF** là bộ công cụ PDF dành cho máy tính Windows. Mọi thao tác xử lý đều chạy ngay trên máy của bạn; tệp không được gửi lên máy chủ nào.

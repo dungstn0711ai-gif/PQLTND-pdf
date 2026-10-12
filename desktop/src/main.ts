@@ -100,9 +100,9 @@ function resolveAppPaths() {
     manifestPath = path.resolve(appRoot, 'app', 'modules-manifest.json');
   }
 
-  let iconPath = path.join(appRoot, 'public', 'images', 'cit-pdf-icon-512.png');
+  let iconPath = path.join(appRoot, 'public', 'images', 'pqltnd-pdf-icon-512.png');
   if (!fs.existsSync(iconPath)) {
-    iconPath = path.join(distDir, 'images', 'cit-pdf-icon-512.png');
+    iconPath = path.join(distDir, 'images', 'pqltnd-pdf-icon-512.png');
   }
 
   return { distDir, manifestPath, iconPath };

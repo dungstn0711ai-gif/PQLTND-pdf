@@ -1,4 +1,4 @@
-// Renders public/images/cit-pdf-logo.svg into the PNG icons used by the
+// Renders public/images/pqltnd-pdf-logo.svg into the PNG icons used by the
 // desktop app. Run with Electron (it provides the SVG rasterizer):
 //   npx electron scripts/generate-desktop-icons.mjs
 import { app, BrowserWindow, nativeImage } from 'electron';
@@ -7,14 +7,14 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const svg = readFileSync(resolve(root, 'public/images/cit-pdf-logo.svg'));
+const svg = readFileSync(resolve(root, 'public/images/pqltnd-pdf-logo.svg'));
 const SIZE = 1024;
 
 const outputs = [
   // electron-builder derives .ico / .icns / Linux icons from this one.
   { path: 'build-resources/icon.png', size: 1024 },
   // Window icon, served with the web bundle.
-  { path: 'public/images/cit-pdf-icon-512.png', size: 512 },
+  { path: 'public/images/pqltnd-pdf-icon-512.png', size: 512 },
 ];
 
 app.disableHardwareAcceleration();

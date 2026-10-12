@@ -31,7 +31,7 @@ execSync('npx vite build', {
   env: {
     // Desktop branding defaults; override by setting these before running.
     VITE_BRAND_NAME: 'PQLTNĐ-PDF',
-    VITE_BRAND_LOGO: 'images/cit-pdf-logo.svg',
+    VITE_BRAND_LOGO: 'images/pqltnd-pdf-logo.svg',
     VITE_FOOTER_TEXT:
       '© 2026 PQLTNĐ-PDF · Lại Tiến Dũng. Dựa trên CIT-PDF (Cường IT) và BentoPDF (AGPL-3.0).',
     VITE_DEFAULT_LANGUAGE: 'vi',
