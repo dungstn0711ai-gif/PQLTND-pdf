@@ -2101,3 +2101,77 @@ details > summary .icon {
   gap: 0.25rem;
   padding: 0.25rem 0;
 }
+
+/* PDF viewer tabs: one per open file, above the viewer frame. */
+.pdf-view-panel {
+  position: relative;
+}
+
+.viewer-tabbar {
+  @apply flex shrink-0 items-end gap-1 border-b border-gray-700 bg-gray-900 px-2 pt-1.5;
+}
+
+.viewer-tab-list {
+  @apply flex min-w-0 flex-1 items-end gap-1 overflow-x-auto;
+  scrollbar-width: thin;
+}
+
+.viewer-tab {
+  @apply flex h-9 min-w-28 max-w-60 shrink-0 cursor-pointer select-none items-center gap-1 rounded-t-lg border border-b-0 border-transparent pl-3 pr-1.5 text-sm text-gray-400 hover:bg-gray-800 hover:text-gray-200;
+}
+
+.viewer-tab[aria-selected='true'] {
+  @apply border-gray-700 bg-gray-800 text-white;
+  box-shadow: inset 0 2px 0 #14b8a6;
+}
+
+.viewer-tab:focus-visible {
+  outline: 2px solid #14b8a6;
+  outline-offset: -2px;
+}
+
+.viewer-tab-title {
+  @apply min-w-0 flex-1 truncate;
+}
+
+.viewer-tab-close {
+  @apply flex size-6 shrink-0 items-center justify-center rounded-md text-gray-400 hover:bg-gray-600 hover:text-white;
+}
+
+.viewer-tab-add {
+  @apply mb-0.5 flex size-8 shrink-0 items-center justify-center rounded-md text-gray-300 hover:bg-gray-700 hover:text-white;
+}
+
+.viewer-tab-menu {
+  @apply fixed z-50 min-w-48 rounded-lg border border-gray-700 bg-gray-800 py-1 text-sm text-gray-200 shadow-xl;
+}
+
+.viewer-tab-menu button {
+  @apply block w-full px-3 py-1.5 text-left hover:bg-gray-700 disabled:cursor-default disabled:text-gray-500 disabled:hover:bg-transparent;
+}
+
+/* Shown while PDFs are dragged over the window, so a viewer frame cannot
+   swallow the drop. Colours are fixed: it sits on a teal wash in both themes. */
+.viewer-drop-overlay {
+  @apply absolute inset-0 z-20 flex items-center justify-center text-lg font-semibold;
+  color: #ffffff;
+  background: rgba(15, 118, 110, 0.85);
+  border: 3px dashed rgba(255, 255, 255, 0.85);
+}
+
+.viewer-drop-overlay > * {
+  pointer-events: none;
+}
+
+.viewer-drop-overlay.hidden {
+  display: none;
+}
+
+/* A tab that is not shown stays laid out underneath. display:none would drop
+   the frame's scroll position, so the page being read would be lost. */
+.viewer-frame-hidden {
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
+  pointer-events: none;
+}

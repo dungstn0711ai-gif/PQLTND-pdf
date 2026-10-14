@@ -724,7 +724,14 @@
     "close": "Đóng",
     "tools": "Mở bằng công cụ",
     "twoPages": "Xem 2 trang",
-    "invalidFile": "Vui lòng chọn một tệp PDF hợp lệ."
+    "invalidFile": "Vui lòng chọn một tệp PDF hợp lệ.",
+    "tabs": "Các tệp đang mở",
+    "addFiles": "Mở thêm tệp PDF",
+    "closeTab": "Đóng tab",
+    "closeOthers": "Đóng các tab khác",
+    "closeAll": "Đóng tất cả các tab",
+    "dropToOpen": "Thả tệp PDF vào đây để mở thành tab mới",
+    "someInvalid": "Đã bỏ qua {{count}} tệp không phải PDF."
   },
   "viewMetadata": {
     "name": "Xem Metadata",

@@ -15,6 +15,7 @@ import {
   VIEWER_TOOLS_EVENT,
   type ViewerToolsDetail,
 } from '../logic/view-pdf-events.js';
+import { fileKey } from '../logic/view-pdf-tabs.js';
 
 interface ShellOptions {
   categoryTranslationKeys: Record<string, string>;
@@ -364,40 +365,61 @@ function getFileInput(): HTMLInputElement | null {
   return document.getElementById('file-input') as HTMLInputElement | null;
 }
 
-// True while injectFile is dispatching, to tell its change event apart from
-// the user picking a file themselves.
-let injecting = false;
+// The File made for each opened path, so the viewer's "open with tool" can
+// find the path again from the File a tab holds.
+const openedByKey = new Map<string, OpenedFile>();
+// A path keeps the modified time of its first load, so opening it again gives
+// a File the viewer recognises as the one it already has open.
+const openedAt = new Map<string, number>();
 
-async function injectFile(file: OpenedFile): Promise<boolean> {
+/** Hands the files to the page through its file input, all in one change. */
+async function injectFiles(opened: OpenedFile[]): Promise<boolean> {
   const bridge = getBridge();
   const input = getFileInput();
   if (!bridge || !input) return false;
-  try {
-    const bytes = await bridge.readOpenedFile(file.path);
-    const transfer = new DataTransfer();
-    transfer.items.add(
-      new File([bytes as BlobPart], file.name, { type: 'application/pdf' })
-    );
-    input.files = transfer.files;
-    injecting = true;
+
+  const transfer = new DataTransfer();
+  const failed: string[] = [];
+  for (const item of opened) {
     try {
-      input.dispatchEvent(new Event('change', { bubbles: true }));
-    } finally {
-      injecting = false;
+      const bytes = await bridge.readOpenedFile(item.path);
+      let modified = openedAt.get(item.path);
+      if (modified === undefined) {
+        modified = Date.now();
+        openedAt.set(item.path, modified);
+      }
+      const file = new File([bytes as BlobPart], item.name, {
+        type: 'application/pdf',
+        lastModified: modified,
+      });
+      openedByKey.set(fileKey(file), item);
+      transfer.items.add(file);
+    } catch (e) {
+      console.error('[Desktop] Could not load opened file:', e);
+      failed.push(item.name);
     }
-    return true;
-  } catch (e) {
-    console.error('[Desktop] Could not load opened file:', e);
-    window.alert(`${ds('openFileFailed')}: ${file.name}`);
-    return false;
   }
+  if (failed.length > 0) {
+    window.alert(`${ds('openFileFailed')}: ${failed.join(', ')}`);
+  }
+  if (transfer.files.length === 0) return false;
+
+  input.files = transfer.files;
+  input.dispatchEvent(new Event('change', { bubbles: true }));
+  return true;
 }
 
-function rememberPendingFile(file: OpenedFile): void {
+function rememberPendingFiles(files: OpenedFile[]): void {
   try {
-    sessionStorage.setItem(PENDING_FILE_KEY, JSON.stringify(file));
+    const stored = sessionStorage.getItem(PENDING_FILE_KEY);
+    const earlier = stored ? (JSON.parse(stored) as OpenedFile[]) : [];
+    const merged = [...earlier];
+    for (const file of files) {
+      if (!merged.some((known) => known.path === file.path)) merged.push(file);
+    }
+    sessionStorage.setItem(PENDING_FILE_KEY, JSON.stringify(merged));
   } catch (e) {
-    console.warn('[Desktop] Could not remember opened file:', e);
+    console.warn('[Desktop] Could not remember opened files:', e);
   }
 }
 
@@ -437,7 +459,7 @@ function showOpenFilePicker(
     );
     useCurrent.addEventListener('click', () => {
       close();
-      void injectFile(file);
+      void injectFiles([file]);
     });
     dialog.append(useCurrent);
   }
@@ -453,7 +475,7 @@ function showOpenFilePicker(
       iconEl(tool.icon, 'text-2xl text-indigo-400'),
       el('span', '', tool.name)
     );
-    card.addEventListener('click', () => rememberPendingFile(file));
+    card.addEventListener('click', () => rememberPendingFiles([file]));
     grid.append(card);
   });
   dialog.append(grid);
@@ -485,53 +507,43 @@ function initOpenedFiles(
 
   const onViewer = currentTool?.slug === VIEWER_SLUG;
 
-  // On the viewer page, the open file can be handed on to another tool. A
+  // On the viewer page, the file in a tab can be handed on to another tool. A
   // file that came from the OS already has a path; one picked in the page
   // gets its path from the bridge.
-  let viewerFile: OpenedFile | null = null;
-  const setViewerFile = (file: OpenedFile | null) => {
-    viewerFile = file;
-  };
   if (onViewer) {
     document.addEventListener(VIEWER_TOOLS_EVENT, (event) => {
       const { file } = (event as CustomEvent<ViewerToolsDetail>).detail;
       void (async () => {
-        const opened = viewerFile ?? (await bridge.registerPickedFile(file));
+        const opened =
+          openedByKey.get(fileKey(file)) ??
+          (await bridge.registerPickedFile(file));
         if (opened) showOpenFilePicker(opened, tools, undefined);
         else showAlert(ds('openFileFailed'), ds('viewerNoPath'));
       })();
     });
-
-    getFileInput()?.addEventListener('change', () => {
-      if (!injecting) setViewerFile(null);
-    });
   }
 
-  const load = async (file: OpenedFile) => {
-    const loaded = await injectFile(file);
-    if (loaded && onViewer) setViewerFile(file);
-  };
-
-  // A file handed over from the previous page: load it into this tool.
+  // Files handed over from the previous page: load them into this tool.
   try {
     const pending = sessionStorage.getItem(PENDING_FILE_KEY);
     if (pending) {
       sessionStorage.removeItem(PENDING_FILE_KEY);
-      void load(JSON.parse(pending) as OpenedFile);
+      const parsed = JSON.parse(pending) as OpenedFile | OpenedFile[];
+      void injectFiles(Array.isArray(parsed) ? parsed : [parsed]);
     }
   } catch (e) {
-    console.warn('[Desktop] Could not restore opened file:', e);
+    console.warn('[Desktop] Could not restore opened files:', e);
   }
 
   const check = async () => {
-    const file = await bridge.takeOpenedFile();
-    if (!file) return;
+    const files = await bridge.takeOpenedFiles();
+    if (files.length === 0) return;
     switch (openFileAction(currentTool?.slug ?? '', Boolean(viewerTool))) {
       case 'load':
-        await load(file);
+        await injectFiles(files);
         break;
       case 'navigate': {
-        rememberPendingFile(file);
+        rememberPendingFiles(files);
         // Go through a link so rewriteLinks applies the language prefix.
         const link = el('a', 'hidden');
         link.href = viewerTool!.href;
@@ -541,9 +553,18 @@ function initOpenedFiles(
         break;
       }
       default:
-        showOpenFilePicker(file, tools, currentTool);
+        showOpenFilePicker(files[0], tools, currentTool);
     }
   };
-  bridge.onFileOpened(() => void check());
+
+  // Explorer starts the app once per selected file, so several files can
+  // arrive a moment apart: wait briefly and open them together.
+  let timer: number | undefined;
+  bridge.onFileOpened(() => {
+    window.clearTimeout(timer);
+    timer = window.setTimeout(() => {
+      void check();
+    }, 120);
+  });
   void check();
 }

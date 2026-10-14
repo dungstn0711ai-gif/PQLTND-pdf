@@ -726,7 +726,14 @@
     "close": "Close",
     "tools": "Open with tool",
     "twoPages": "Two-page view",
-    "invalidFile": "Please choose a valid PDF file."
+    "invalidFile": "Please choose a valid PDF file.",
+    "tabs": "Open files",
+    "addFiles": "Open more PDF files",
+    "closeTab": "Close tab",
+    "closeOthers": "Close other tabs",
+    "closeAll": "Close all tabs",
+    "dropToOpen": "Drop PDF files to open them in new tabs",
+    "someInvalid": "{{count}} file(s) were skipped because they are not PDF files."
   },
   "viewMetadata": {
     "name": "View Metadata",

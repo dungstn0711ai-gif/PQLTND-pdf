@@ -48,8 +48,9 @@ const bridge = {
     };
   },
 
-  takeOpenedFile: (): Promise<OpenedFile | null> => {
-    return ipcRenderer.invoke(IPC_CHANNELS.TAKE_OPENED_FILE);
+  // Everything queued so far, in the order it was handed over.
+  takeOpenedFiles: (): Promise<OpenedFile[]> => {
+    return ipcRenderer.invoke(IPC_CHANNELS.TAKE_OPENED_FILES);
   },
 
   readOpenedFile: (filePath: string): Promise<Uint8Array> => {

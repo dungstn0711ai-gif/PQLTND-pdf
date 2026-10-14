@@ -131,8 +131,11 @@
               >
               <span data-i18n="upload.orDragAndDrop">or drag and drop</span>
             </p>
-            <p class="text-xs text-gray-500" data-i18n="upload.hints.singlePdf">
-              A single PDF file
+            <p
+              class="text-xs text-gray-500"
+              data-i18n="upload.hints.oneOrMorePdfs"
+            >
+              One or more PDF files
             </p>
             <p class="text-xs text-gray-500" data-i18n="upload.filesNeverLeave">
               Your files never leave your device.
@@ -143,14 +146,49 @@
             type="file"
             class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
             accept="application/pdf"
+            multiple
           />
         </div>
       </div>
     </div>
 
     <div id="viewer-panel" class="pdf-view-panel hidden">
+      <!-- One tab per open file (view-pdf-page.ts). -->
+      <div id="viewer-tabbar" class="viewer-tabbar">
+        <div
+          id="viewer-tab-list"
+          class="viewer-tab-list"
+          role="tablist"
+          aria-label="Open files"
+        ></div>
+        <button
+          id="viewer-tab-add"
+          type="button"
+          class="viewer-tab-add"
+          data-i18n-title="tools:viewPdf.addFiles"
+          title="Open more PDF files"
+        >
+          <svg
+            viewBox="0 0 16 16"
+            width="14"
+            height="14"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M8 3v10M3 8h10" />
+          </svg>
+        </button>
+      </div>
       <!-- The toolbar lives inside the viewer frame (pdf-viewer-chrome.ts). -->
-      <div id="pdf-viewer-container" class="flex-1 min-h-0"></div>
+      <div id="pdf-viewer-container" class="relative flex-1 min-h-0"></div>
+      <div id="viewer-drop-overlay" class="viewer-drop-overlay hidden">
+        <span data-i18n="tools:viewPdf.dropToOpen"
+          >Drop PDF files to open them in new tabs</span
+        >
+      </div>
     </div>
 
     <div

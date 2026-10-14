@@ -93,7 +93,7 @@ export const IPC_CHANNELS = {
   GET_MODULES_STATUS: 'bento:get-modules-status',
   REMOVE_MODULE: 'bento:remove-module',
   FILE_OPENED: 'bento:file-opened',
-  TAKE_OPENED_FILE: 'bento:take-opened-file',
+  TAKE_OPENED_FILES: 'bento:take-opened-files',
   READ_OPENED_FILE: 'bento:read-opened-file',
   ENSURE_MODULES: 'bento:ensure-modules',
   MODULE_PROGRESS: 'bento:module-progress',

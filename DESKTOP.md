@@ -30,6 +30,14 @@ Tài liệu này dành cho người phát triển và người đóng gói bản
 
 Mở một tệp PDF từ hệ điều hành, từ menu **Tệp → Mở tệp PDF…** (`Ctrl+O`) hoặc từ công cụ "Xem PDF" sẽ vào thẳng trình xem. Từ trình xem có nút chuyển tệp đang mở sang một công cụ khác.
 
+**Nhiều tệp, nhiều tab.** Trình xem mở mỗi tệp PDF trong một tab riêng, giống Foxit hay trình duyệt:
+
+- Chọn nhiều tệp cùng lúc (giữ `Ctrl` hoặc `Shift` trong hộp thoại mở tệp), chọn nhiều tệp trong Explorer rồi "Mở bằng", hoặc kéo thả nhiều tệp vào cửa sổ. Mỗi tệp thành một tab; tab đầu tiên được hiện ra.
+- Nút **+** cuối thanh tab mở thêm tệp. Mở lại một tệp đang có tab thì chuyển về tab đó, không tạo tab trùng.
+- Chuyển tab bằng cách bấm tab, `Ctrl+Tab` / `Ctrl+Shift+Tab` hoặc `Ctrl+PageDown` / `Ctrl+PageUp`. Mỗi tab giữ nguyên trang đang đọc và mức thu phóng.
+- Đóng tab bằng nút ×, bấm giữa chuột, `Ctrl+W` hoặc nút Đóng trên thanh công cụ. Chuột phải vào tab có "Đóng các tab khác" và "Đóng tất cả các tab". Đóng tab cuối cùng thì quay về màn hình chọn tệp.
+- Khung xem của một tab chỉ được tạo khi tab đó được mở lần đầu, nên mở hàng chục tệp cùng lúc vẫn nhẹ. Các tab đã mở vẫn nằm trong bộ nhớ cho đến khi đóng.
+
 ### In
 
 Trình xem có hộp thoại in riêng (`Ctrl+P`), thay cho hộp thoại in của hệ điều hành:

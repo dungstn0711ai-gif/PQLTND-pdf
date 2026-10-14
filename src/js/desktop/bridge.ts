@@ -78,7 +78,7 @@ interface DesktopBridge {
   getModulesStatus(): Promise<ModuleStatus[]>;
   removeModule(name: DesktopModuleName): Promise<boolean>;
   onFileOpened(cb: () => void): () => void;
-  takeOpenedFile(): Promise<OpenedFile | null>;
+  takeOpenedFiles(): Promise<OpenedFile[]>;
   readOpenedFile(path: string): Promise<Uint8Array>;
   listPrinters(): Promise<PrinterInfo[]>;
   print(request: PrintRequest): Promise<PrintResult>;

@@ -46,31 +46,43 @@ let modulesManager: ModulesManager | null = null;
 // Files the user explicitly handed to the app (OS "Open with", File > Open).
 // The renderer may only read paths that are in this set.
 const allowedOpenPaths = new Set<string>();
-let pendingOpenFile: string | null = null;
+// Files waiting for the page to pick them up. A page opens them all at once,
+// as tabs in the viewer.
+const pendingOpenFiles: string[] = [];
 
-function findPdfArg(argv: string[], cwd = process.cwd()): string | null {
+/** Every existing .pdf named on the command line, without repeats. */
+function findPdfArgs(argv: string[], cwd = process.cwd()): string[] {
+  const found: string[] = [];
   for (const arg of argv.slice(1)) {
     if (arg.startsWith('-') || !/\.pdf$/i.test(arg)) continue;
     const resolved = path.resolve(cwd, arg);
-    if (fs.existsSync(resolved)) return resolved;
+    if (!found.includes(resolved) && fs.existsSync(resolved)) {
+      found.push(resolved);
+    }
   }
-  return null;
+  return found;
 }
 
-function queueOpenFile(filePath: string) {
-  allowedOpenPaths.add(filePath);
-  pendingOpenFile = filePath;
-  mainWindow?.webContents.send(IPC_CHANNELS.FILE_OPENED);
+function queueOpenFiles(filePaths: string[]) {
+  let added = false;
+  for (const filePath of filePaths) {
+    allowedOpenPaths.add(filePath);
+    if (!pendingOpenFiles.includes(filePath)) {
+      pendingOpenFiles.push(filePath);
+      added = true;
+    }
+  }
+  if (added) mainWindow?.webContents.send(IPC_CHANNELS.FILE_OPENED);
 }
 
 async function showOpenFileDialog() {
   if (!mainWindow) return;
   const result = await dialog.showOpenDialog(mainWindow, {
-    properties: ['openFile'],
+    properties: ['openFile', 'multiSelections'],
     filters: [{ name: 'PDF', extensions: ['pdf'] }],
   });
-  if (!result.canceled && result.filePaths[0]) {
-    queueOpenFile(result.filePaths[0]);
+  if (!result.canceled && result.filePaths.length > 0) {
+    queueOpenFiles(result.filePaths);
   }
 }
 
@@ -100,7 +112,12 @@ function resolveAppPaths() {
     manifestPath = path.resolve(appRoot, 'app', 'modules-manifest.json');
   }
 
-  let iconPath = path.join(appRoot, 'public', 'images', 'pqltnd-pdf-icon-512.png');
+  let iconPath = path.join(
+    appRoot,
+    'public',
+    'images',
+    'pqltnd-pdf-icon-512.png'
+  );
   if (!fs.existsSync(iconPath)) {
     iconPath = path.join(distDir, 'images', 'pqltnd-pdf-icon-512.png');
   }
@@ -206,11 +223,10 @@ ipcMain.handle(
   }
 );
 
-ipcMain.handle(IPC_CHANNELS.TAKE_OPENED_FILE, (): OpenedFile | null => {
-  if (!pendingOpenFile) return null;
-  const filePath = pendingOpenFile;
-  pendingOpenFile = null;
-  return { path: filePath, name: path.basename(filePath) };
+ipcMain.handle(IPC_CHANNELS.TAKE_OPENED_FILES, (): OpenedFile[] => {
+  return pendingOpenFiles
+    .splice(0)
+    .map((filePath) => ({ path: filePath, name: path.basename(filePath) }));
 });
 
 ipcMain.handle(
@@ -434,7 +450,14 @@ function buildMenu(): void {
               { type: 'separator' as const },
               { role: 'front' as const, label: text.bringAllToFront },
             ]
-          : [{ role: 'close' as const, label: text.closeWindow }]),
+          : [
+              {
+                role: 'close' as const,
+                label: text.closeWindow,
+                // Not the default Ctrl+W: that key closes a tab in the viewer.
+                accelerator: 'Alt+F4',
+              },
+            ]),
       ],
     },
     {
@@ -468,19 +491,17 @@ app.on('second-instance', (_event, argv, workingDirectory) => {
     if (mainWindow.isMinimized()) mainWindow.restore();
     mainWindow.focus();
   }
-  const filePath = findPdfArg(argv, workingDirectory);
-  if (filePath) queueOpenFile(filePath);
+  queueOpenFiles(findPdfArgs(argv, workingDirectory));
 });
 
 // macOS delivers "Open with" through this event instead of argv.
 app.on('open-file', (event, filePath) => {
   event.preventDefault();
-  queueOpenFile(filePath);
+  queueOpenFiles([filePath]);
 });
 
 app.whenReady().then(() => {
-  const startupFile = findPdfArg(process.argv);
-  if (startupFile) queueOpenFile(startupFile);
+  queueOpenFiles(findPdfArgs(process.argv));
 
   createWindow();
 
