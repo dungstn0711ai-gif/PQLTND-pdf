@@ -33,6 +33,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Mỗi lần build có số phiên bản riêng 1.0.<số lần chạy> (trùng số "bản build"
+      # ở mục Releases) và ngày build theo giờ Việt Nam. Hai giá trị này được in
+      # vào trang Giới thiệu, thanh trạng thái và tên tệp cài đặt.
+      - name: Stamp version and build date
+        shell: bash
+        run: |
+          version="1.0.${{ github.run_number }}"
+          builddate=$(TZ=Asia/Ho_Chi_Minh date +%d/%m/%Y)
+          node -e "const f='desktop/package.json';const p=JSON.parse(require('fs').readFileSync(f,'utf8'));p.version='$version';require('fs').writeFileSync(f,JSON.stringify(p,null,2)+'\n')"
+          echo "APP_BUILD_DATE=$builddate" >> "$GITHUB_ENV"
+          echo "APP_VERSION_STAMP=$version" >> "$GITHUB_ENV"
+          echo "Phiên bản $version, ngày build $builddate"
+
       - name: Build installer (Setup + Portable)
         shell: bash
         env:
@@ -63,10 +76,11 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: build-${{ github.run_number }}
-          name: PQLTNĐ-PDF - bản build ${{ github.run_number }}
+          name: PQLTNĐ-PDF ${{ env.APP_VERSION_STAMP }} (build ${{ env.APP_BUILD_DATE }})
           body: |
-            Bộ cài PQLTNĐ-PDF cho Windows, tự động đóng gói từ commit ${{ github.sha }}.
+            PQLTNĐ-PDF phiên bản ${{ env.APP_VERSION_STAMP }}, build ngày ${{ env.APP_BUILD_DATE }}.
+            Tự động đóng gói từ commit ${{ github.sha }}.
             - `...-Setup.exe`: bản cài đặt.
-            - `...-Portable.exe`: bản chạy thẳng, không cần cài.
+            - `...-Portable.exe`: bản chạy thẳng, không cần cài (mỗi lần mở phải giải nén nên chậm hơn bản cài đặt).
           files: |
             release/*.exe

@@ -598,6 +598,7 @@ export default defineConfig(() => {
             process.env.APP_VERSION ||
             process.env.npm_package_version ||
             'Unknown',
+          appBuildDate: process.env.APP_BUILD_DATE || '',
         },
       }),
       languageRouterPlugin(),

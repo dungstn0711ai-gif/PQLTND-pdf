@@ -149,6 +149,12 @@ function createWindow() {
       backgroundThrottling: false,
       sandbox: false,
       webSecurity: true,
+      // The app has no text fields that need red underlines; skipping the
+      // spell-check service saves memory and a little start-up time.
+      spellcheck: false,
+      // Keep V8's compiled-code cache from the first run so the big bundles
+      // are not re-parsed on every launch.
+      v8CacheOptions: 'bypassHeatCheck',
     },
   });
 

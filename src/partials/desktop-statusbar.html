@@ -5,7 +5,8 @@
 >
   <span
     >{{#if brandName}}{{brandName}}{{else}}BentoPDF{{/if}}
-    <span id="app-version">{{appVersion}}</span></span
+    <span id="app-version">{{appVersion}}</span>{{#if appBuildDate}} ·
+    <span id="app-build-date">{{appBuildDate}}</span>{{/if}}</span
   >
   <a
     id="desktop-modules-status"

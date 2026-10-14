@@ -8,7 +8,7 @@ import {
   readFileSync,
   rmSync,
 } from 'node:fs';
-import { resolve, dirname } from 'node:path';
+import { resolve, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -21,7 +21,20 @@ const desktopVersion = JSON.parse(
   readFileSync(resolve(root, 'desktop', 'package.json'), 'utf8')
 ).version;
 
-console.log('=== Building PQLTNĐ-PDF Desktop Application ===');
+// Build date shown next to the version (About page, status bar). Vietnam time,
+// dd/mm/yyyy. CI can pin it with APP_BUILD_DATE.
+const buildDate =
+  process.env.APP_BUILD_DATE ||
+  new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Ho_Chi_Minh',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  }).format(new Date());
+
+console.log(
+  `=== Building PQLTNĐ-PDF Desktop Application ${desktopVersion} (${buildDate}) ===`
+);
 
 // 1. Build web assets for desktop (tools only, no compression duplicates, no SW precache)
 console.log('1. Building frontend with Vite (desktop mode)...');
@@ -41,6 +54,7 @@ execSync('npx vite build', {
     VITE_DESKTOP: 'true',
     SIMPLE_MODE: 'true',
     APP_VERSION: desktopVersion,
+    APP_BUILD_DATE: buildDate,
   },
 });
 
@@ -79,6 +93,23 @@ const targetWeb = resolve(root, 'desktop', 'dist-web');
 
 rmSync(targetWeb, { recursive: true, force: true });
 
+// Files the packaged app never loads. Dropping them keeps the installer and
+// the unpacked app small, which also means less to scan and read on a cold
+// start.
+//  - source maps (debug only) and the website's social preview images
+//  - the .woff copies of fonts: Chromium always takes the .woff2 listed first
+//  - the Phosphor icon font in .ttf/.svg form, same reason
+function isUnneeded(name, parentName) {
+  if (name.endsWith('.map')) return true;
+  if (/^og-.*\.png$/.test(name)) return true;
+  if (name === 'CHANGELOG.md') return true;
+  if (parentName === 'assets') {
+    if (name.endsWith('.woff')) return true;
+    if (/^Phosphor-.*\.(ttf|svg)$/.test(name)) return true;
+  }
+  return false;
+}
+
 function copyFiltered(src, dest) {
   mkdirSync(dest, { recursive: true });
   for (const entry of readdirSync(src, { withFileTypes: true })) {
@@ -91,6 +122,9 @@ function copyFiltered(src, dest) {
       entry.name === 'soffice.data.gz' ||
       entry.name === 'sw.js'
     ) {
+      continue;
+    }
+    if (!entry.isDirectory() && isUnneeded(entry.name, basename(src))) {
       continue;
     }
 

@@ -142,3 +142,11 @@ PQLTNĐ-PDF là bản sửa đổi của BentoPDF và phát hành theo **GNU AGP
 3. Chạy `npm run desktop:dist`; bộ cài nằm trong `release/`.
 4. Cài thử trên một máy chưa từng cài PQLTNĐ-PDF: mở tệp PDF từ Explorer, chạy một công cụ cần tải bộ xử lý, in thử một trang.
 5. Gắn thẻ phiên bản, đẩy mã nguồn lên GitHub và tạo Release kèm các tệp trong `release/`.
+
+## Version number and build date
+
+CI (`.github/workflows/build-windows.yml`) sets the version to `1.0.<run number>` in `desktop/package.json` and passes the build date (Vietnam time, dd/mm/yyyy) as `APP_BUILD_DATE`. Both appear in the About page, the status bar, the installer file name and the GitHub release title. A local build uses the version in `desktop/package.json` and today's date.
+
+## Size and start-up
+
+`scripts/build-desktop.mjs` leaves out source maps, `og-*.png`, the unused `.woff`/Phosphor `.ttf`/`.svg` font copies and `CHANGELOG.md`; `electron-builder.json` keeps only the `vi` and `en-US` Chromium locales and uses maximum NSIS compression. The Portable build unpacks itself on every launch, so the Setup build starts faster.
